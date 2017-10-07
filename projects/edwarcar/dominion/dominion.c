@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+
+
 int compare(const void* a, const void* b) {
   if (*(int*)a > *(int*)b)
     return 1;
@@ -643,6 +645,100 @@ int getCost(int cardNumber)
   return -1;
 }
 
+
+int SmithyCard(int currentPlayer, struct gameState *state, int handPos) {
+
+  //+3 Cards
+  int i;
+  for (i = 0; i < 5; i++)
+  {
+      drawCard(currentPlayer, state);
+  }
+   //discard card from hand
+   //discardCard(handPos, currentPlayer, state, 0);
+   return 0;
+//bug introduced: draw 5 cards instead of 3; do not discard a card
+
+}
+
+int AdventurerCard(int currentPlayer, struct gameState *state, int drawntreasure, int temphand[], int cardDrawn, int z) {
+
+  while(drawntreasure<5){
+        if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
+          shuffle(currentPlayer, state);
+        }
+        drawCard(currentPlayer, state);
+        cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+        if (cardDrawn == gold || cardDrawn == silver || cardDrawn == copper)
+		drawntreasure++;
+        else{
+          temphand[z]=cardDrawn;
+          state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+          z++;
+        }
+      }
+      while(z-1>=0){
+        state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
+        z=z-1;
+      }
+
+  return 0;
+// bug introduced: player is able to draw 5 treasure cards instead of 2. 
+}
+
+
+int VillageCard(int currentPlayer, struct gameState *state, int handPos){
+
+   //+1 Card
+   drawCard(currentPlayer, state);
+   drawCard(currentPlayer, state);  
+   drawCard(currentPlayer, state);
+
+   //+2 Actions
+   state->numActions = state->numActions + 10;
+  
+    //discard played card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+
+  return 0; 
+// bug introduced: increase action points by 10 instead of 2 and draw 3 cards instead of 1 
+}
+
+int GreatHallCard(int currentPlayer, struct gameState *state, int handPos){
+
+      //+1 Card
+      drawCard(currentPlayer, state);
+
+      //+1 Actions
+      state->numActions++;
+
+      //discard card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+      
+      return 0;   
+}
+
+int EmbargoCard(int currentPlayer, struct gameState *state, int handPos, int choice1) {
+
+	state->coins = state->coins + 20;
+
+      //see if selected pile is in play
+       if ( state->supplyCount[choice1] == -1 )
+          {
+             return -1;
+          }
+    
+       //add embargo token to selected supply pile
+       state->embargoTokens[choice1]++;
+       state->embargoTokens[choice1]++;  
+
+      //trash card
+       discardCard(handPos, currentPlayer, state, 1);
+
+	return 0; 
+//bug introduced: increase state->coins by 20 instead of 2, and add 2 embargo tokens instead of one
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
@@ -667,25 +763,11 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-      while(drawntreasure<2){
-	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
-	  shuffle(currentPlayer, state);
-	}
-	drawCard(currentPlayer, state);
-	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
-	  drawntreasure++;
-	else{
-	  temphand[z]=cardDrawn;
-	  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
-	  z++;
-	}
-      }
-      while(z-1>=0){
-	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
-	z=z-1;
-      }
-      return 0;
+     
+	//call function 
+	AdventurerCard(currentPlayer, state, drawntreasure, temphand, cardDrawn, z);
+
+	return 0;
 			
     case council_room:
       //+4 Cards
@@ -829,26 +911,14 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+      	SmithyCard(currentPlayer, state, handPos);
+	return 0;
 		
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-			
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+      
+	VillageCard(currentPlayer, state, handPos);
+
+	return 0;
 		
     case baron:
       state->numBuys++;//Increase buys by 1!
@@ -902,15 +972,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case great_hall:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+1 Actions
-      state->numActions++;
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+      
+	GreatHallCard(currentPlayer, state, handPos);
+
+	return 0;
 		
     case minion:
       //+1 action
@@ -1139,21 +1204,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 		
     case embargo: 
-      //+2 Coins
-      state->coins = state->coins + 2;
-			
-      //see if selected pile is in play
-      if ( state->supplyCount[choice1] == -1 )
-	{
-	  return -1;
-	}
-			
-      //add embargo token to selected supply pile
-      state->embargoTokens[choice1]++;
-			
-      //trash card
-      discardCard(handPos, currentPlayer, state, 1);		
-      return 0;
+      
+	EmbargoCard(currentPlayer, handPos, state, choice1); 
+	return 0;
 		
     case outpost:
       //set outpost flag
