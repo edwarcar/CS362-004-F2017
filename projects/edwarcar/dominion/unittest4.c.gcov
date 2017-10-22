@@ -1,0 +1,153 @@
+        -:    0:Source:unittest4.c
+        -:    0:Graph:unittest4.gcno
+        -:    0:Data:unittest4.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdlib.h>
+        -:    2:#include <stdio.h>
+        -:    3:#include "dominion.h"
+        -:    4:#include "rngs.h"
+        -:    5:#include <time.h>
+        -:    6:
+        -:    7://testing initializeGame function in dominion.c
+        -:    8:
+function main called 1 returned 100% blocks executed 66%
+        1:    9:int main(int argc, char** argv){
+        -:   10:
+        1:   11:printf("/*********************** Testing InitializeGame() **************************/\n");
+call    0 returned 100%
+        -:   12:
+        -:   13://initialize variables, create a new game state
+        -:   14:
+        -:   15:struct gameState game;
+        -:   16:int numPlayers; 
+        1:   17:int k[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        1:   18:int seed = rand() % 10; 
+call    0 returned 100%
+        -:   19:
+        -:   20://test out a few scenarios
+        -:   21:
+        -:   22://test 1 - invalid number of players
+        1:   23:numPlayers = 0;
+        1:   24:if(initializeGame(numPlayers, k, seed, &game) != -1){ //assert this test does not pass because number of players is 0
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+    #####:   25:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   26:}
+        -:   27:
+        -:   28://test 2 with valid number of players
+        1:   29:numPlayers = 2;
+        1:   30:if(initializeGame(numPlayers, k, seed, &game) == -1){
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+    #####:   31:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   32:}
+        -:   33:
+        -:   34://test 3 - ensure correct number of curse cards set 
+        -:   35:
+        1:   36:numPlayers = 2;
+        1:   37:initializeGame(numPlayers, k, seed, &game);
+call    0 returned 100%
+        1:   38:if(game.supplyCount[curse] != 10){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   39:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   40:}
+        -:   41:
+        1:   42:numPlayers = 3;
+        1:   43:initializeGame(numPlayers, k, seed, &game);
+call    0 returned 100%
+        1:   44:if(game.supplyCount[curse] != 20){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   45:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   46:}
+        -:   47:
+        1:   48:numPlayers = 4; 
+        1:   49:initializeGame(numPlayers, k, seed, &game);
+call    0 returned 100%
+        1:   50:if(game.supplyCount[curse] != 30){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   51:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   52:}
+        -:   53:
+        -:   54://test 4 - ensure correct number of victory cards set 
+        1:   55:numPlayers = 2;
+        1:   56:initializeGame(numPlayers, k, seed, &game);
+call    0 returned 100%
+        1:   57:if(game.supplyCount[estate] != 8){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   58:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   59:}
+        1:   60:if(game.supplyCount[duchy] != 8){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   61:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   62:}
+        1:   63:if(game.supplyCount[province] != 8){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   64:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   65:}
+        -:   66:
+        -:   67:
+        1:   68:numPlayers = 3;
+        1:   69:initializeGame(numPlayers, k, seed, &game);
+call    0 returned 100%
+        1:   70:if(game.supplyCount[estate] != 12){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   71:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   72:}
+        1:   73:if(game.supplyCount[duchy] != 12){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   74:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   75:}
+        1:   76:if(game.supplyCount[province] != 12){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   77:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   78:}
+        -:   79://test 5 - ensure correct number of treasure cards set 
+        1:   80:initializeGame(numPlayers, k, seed, &game);
+call    0 returned 100%
+        1:   81:if(game.supplyCount[copper] != 60 - (7 * numPlayers)){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   82:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   83:}
+        1:   84:if(game.supplyCount[silver] != 40){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   85:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   86:}
+        1:   87:if(game.supplyCount[gold] != 30){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   88:	printf("INITIALIZEGAME TEST FAILED\n");
+call    0 never executed
+        -:   89:}
+        -:   90:
+        1:   91:printf("INITIALIZEGAME TEST PASSED\n");
+call    0 returned 100%
+        -:   92:
+        1:   93:return 0;
+        -:   94:}
