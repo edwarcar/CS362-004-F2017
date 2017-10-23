@@ -56,18 +56,6 @@ unitCardTest:
 	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.c cardtest3.c rngs.c -o cardtest3 -lm -g
 	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.c cardtest4.c rngs.c -o cardtest4 -lm -g
 
-myTest:
-	./unittest1 &> unittestresult.out
-	./unittest2 >> unittestresult.out
-	./unittest3 >> unittestresult.out
-	./unittest4 >> unittestresult.out
-	./cardtest1 >> unittestresult.out
-	./cardtest2 >> unittestresult.out
-	./cardtest3 >> unittestresult.out
-	./cardtest4 >> unittestresult.out
-	gcov -b ominion.c >> unittestresult.out
-	cat dominion.c.gcov >> unittestresult.out
-
 unittestresults.out: unit1 unit2 unit3 unit4 card1 card2 card3 card4
 	./unittest1 &> unittestresults.out
 	./unittest2 >> unittestresults.out
