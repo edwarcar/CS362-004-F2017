@@ -1,8 +1,3 @@
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
-#include<time.h>
-
 char inputChar()
 {
     // TODO: rewrite this function
@@ -12,14 +7,14 @@ char inputChar()
 char *inputString()
 {
     // TODO: rewrite this function
-  		char string[6]; //create the array of chars limited to size 6  
-  		int x;
- 		for(x = 0; x < 5; x++)
-  		{
-   		    		string[x] = (rand() % (123-97)) + 97; //return chars 97 - 122 to increase chances of returning 'reset'
- 		}
- 		string[x] = '\0'; //make sure string is terminated with a \0     
- 		return string;	    
+      char string[6]; //create the array of chars limited to size 6  
+      int x;
+    for(x = 0; x < 5; x++)
+      {
+              string[x] = (rand() % (123-97)) + 97; //return chars 97 - 122 to increase chances of returning 'reset'
+    }
+    string[x] = '\0'; //make sure string is terminated with a \0     
+    return string;      
 
 }
 
