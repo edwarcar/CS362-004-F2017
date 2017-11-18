@@ -1,0 +1,89 @@
+The two bugs found in my teammate Danielle’s code are described below. 
+
+Bug Report #1: 
+---------------------------------------------------------------------------------------------------------------------
+Title: handCount not updated properly by Adventurer function
+Bug Report 1: Adventurer
+
+Date: 11/08/17
+Reported by: Carrie Edwards
+Email: edwarcar@oregonstate.edu
+
+Program: Dominion
+Function: Adventurertest
+Tested on: FLIP server
+Reproducible: yes
+
+Description of bug: 
+While running the random test for the adventurer function, a bug was noticed for several of the 500 iterations. In these iterations, an error was printed stating “Error: handCount should increase by 2 after drawing an adventurer card” then outputted the hand count before and after the call to the adventurer function. The difference between the hand count for each error was not consistent, as can be seen below. 
+
+Sample output from bug: 
+Iteration 616: test passed
+Iteration 617: test passed
+Error: handCount should increase by 2 after drawing an adventurer card
+Hand count before: 408. Hand count after: 409
+Iteration 618: test failed
+…
+Iteration 693: test passed
+Error: handCount should increase by 2 after drawing an adventurer card
+Hand count before: 454. Hand count after: 452
+…
+Iteration 814: test passed
+Iteration 815: test passed
+Error: handCount should increase by 2 after drawing an adventurer card
+Hand count before: 380. Hand count after: 380
+…
+
+This bug did not occur consistently. I ran the random test multiple times, and changed the number of iterations of the test to be 10,000. With the higher number of iterations, the bug occurred more frequently. This is indicating that there is an issue with the hand count variable in the adventurer function. However, since it is not occurring 100% of the time, it may be a more subtle bug. 
+
+Steps to Produce/Reproduce:
+Run the random test with 10000 iterations. It it likely that the bug will appear in at least one of those iterations. If the bug does not occur, try running with a larger number of iterations. Running the random test versus the unit test is important, since this bug does not occur that frequently. Therefore, a high number of iterations is key to finding the bug. 
+
+Expected Results:
+The random test for adventurer should have outputted that all iterations of the tests passed. The hand count before and after calling the function should have increased by 2 after calling the adventurer function. This should occur with each iteration. 
+
+Actual Results: 
+On occasion, the error message shown about in the Output section would appear amongst the passing test results. It was much more frequent to see a normal passing result, but occasionally the handCount would not increase by 2 after using the adventurer card in the game. 
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+Bug Report #2: Smithy Card
+---------------------------------------------------------------------------------------------------------------------
+
+Title: Incorrect number of cards discarded by Smithy card. 
+Bug Report 1:  Smithy 
+
+Date: 11/11/17
+Reported by: Carrie Edwards
+Email: edwarcar@oregonstate.edu
+
+Program: Dominion
+Function: Smithy
+Tested on: FLIP server
+Reproducible: yes
+
+Description of bug: 
+While running the random test for the smithy function, occasionally an error message was printed regarding the number of cards discarded. Typically, the number of cards discarded was correct, but once in away the number of cards discarded would go from a large number (in the example below, 206), to 0. For the smithy card, only one card should be discarded per use of the card. 
+
+Output from random test: 
+
+/*********************** Randomly Testing Smithy Card **************************/
+Error: Incorrect number of cards discarded
+Discard count before: 206. discard count after 0.
+Change of: -206
+Iteration 46: test failed
+..
+
+Steps to Produce/Reproduce:
+Run the random test with 500 iterations. It it likely that the bug will appear in at least one of those iterations. If the bug does not occur, try running with a larger number of iterations. Running the random test versus the unit test is important, since this bug does not occur that frequently. Therefore, a high number of iterations is key to finding the bug. 
+
+Expected Results:
+For the smithy card, only one card should be discarded per use of the card. The random test should have produced passing results with all iterations, and the number of cards discarded per iteration should have been 1. Here is a sample of output showing expected results:
+
+Actual Results: 
+For the smithy card, only one card should be discarded per use of the card. Ideally, the random test should have produced passing results with all iterations. Instead, the smithy card was not consistently discarding cards; and at times, the discount count decreased to 0 from a large number of cards. 
+
+---------------------------------------------------------------------------------------------------------------------
+
+
